@@ -8,7 +8,7 @@ import dateutil.parser as parser
 import get_redirected_link
 import traceback
 import inspect
-# import get_final_url_with_selenium
+import get_final_url_with_selenium
 from gnews import GNews
 
 TOPICS = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
@@ -500,38 +500,38 @@ def extract_data4(entry):
 #     return data
 
 
-# def extract_data6(entry):
-#     print("extracting news details......")
-#
-#     newstext, top_image, article_html, canonical_link = "", "", "", ""
-#     print(entry)
-#     try:
-#         link = entry.get("url")
-#         newlink = get_final_url_with_selenium.get_final_url_with_selenium(link)
-#         result = get_full_article(newlink)
-#
-#         if result:
-#             newstext, top_image, article_html, canonical_link = result
-#     except Exception as e:
-#         print(e)
-#     title = entry.get("title")
-#     sep = '-'
-#     title_stripped = title.rsplit(sep, 1)[0]
-#     description = entry.get("description")
-#     summary = generate_content1(entry.get("title") + description + newstext)
-#     summary2 = summary + "If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
-#     data = {
-#         "title": title_stripped,
-#         "date": entry.get("published date"),
-#         "summary": summary2,
-#         "image": top_image,
-#         "website": entry["publisher"].get("href"),
-#         "link": entry.get("link")
-#     }
-#
-#     # res = posttosupabase.insert_data_into_table(table_name="news_article", data=data)
-#
-#     return data
+def extract_data6(entry):
+    print("extracting news details......")
+
+    newstext, top_image, article_html, canonical_link = "", "", "", ""
+    print(entry)
+    try:
+        link = entry.get("url")
+        newlink = get_final_url_with_selenium.get_final_url_with_selenium(link)
+        result = get_full_article(newlink)
+
+        if result:
+            newstext, top_image, article_html, canonical_link = result
+    except Exception as e:
+        print(e)
+    title = entry.get("title")
+    sep = '-'
+    title_stripped = title.rsplit(sep, 1)[0]
+    description = entry.get("description")
+    summary = generate_content1(entry.get("title") + description + newstext)
+    summary2 = summary + "If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
+    data = {
+        "title": title_stripped,
+        "date": entry.get("published date"),
+        "summary": summary2,
+        "image": top_image,
+        "website": entry["publisher"].get("href"),
+        "link": entry.get("link")
+    }
+
+    # res = posttosupabase.insert_data_into_table(table_name="news_article", data=data)
+
+    return data
 
 
 # # # Get recent news

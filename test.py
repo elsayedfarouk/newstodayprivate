@@ -1,6 +1,7 @@
 from gnews import GNews
 import get_final_url_with_selenium
 import googlesheet
+import get_news
 
 
 def get_latest_news():
@@ -42,19 +43,28 @@ def latest_news():
 
     # Example: Print titles only
     print("🔹 Latest News Titles:")
-    for news_data in latest_news[:5]:
+    for news_datax in latest_news[:1]:
         # print(news_data)
+        # Extract data for each entry
+        news_data = get_news.extract_data6(news_datax)
+
+        title = news_data['title']
+        date = news_data['date']
+        summary = news_data['summary']
+        image_path_original = news_data['image']
+        website = news_data['website']
+        article_url = news_data['link']
 
         status = "pending"
-        title = news_data['title']
-        description = news_data['description']
-        published_date = news_data['published_date']
-        url = news_data['url']
-        publisher_title = news_data['publisher_title']
-        publisher_href = news_data['publisher_href']
+        # title = news_data['title']
+        # description = news_data['description']
+        # published_date = news_data['published_date']
+        # url = news_data['url']
+        # publisher_title = news_data['publisher_title']
+        # publisher_href = news_data['publisher_href']
 
-        new_row_data = [status, "latest", country, title, description, published_date, url, publisher_title,
-                        publisher_href]
+        new_row_data = [status, "Latest", country, title, date, summary, image_path_original, website, article_url]
+
         googlesheet.add_row_to_sheet(new_row_data, "NewsToday", "News")
 
 
@@ -65,17 +75,29 @@ def news_by_topic():
         # Get recent news
         topic_news_entries = extract_news_data(get_news_by_topic(topic))
 
-        for news_data in topic_news_entries[:1]:
-            status = "pending"
-            title = news_data['title']
-            description = news_data['description']
-            published_date = news_data['published_date']
-            url = news_data['url']
-            publisher_title = news_data['publisher_title']
-            publisher_href = news_data['publisher_href']
+        for news_datax in topic_news_entries[:1]:
+            # Extract data for each entry
+            news_data = get_news.extract_data6(news_datax)
 
-            new_row_data = [status, topic, country, title, description, published_date, url, publisher_title,
-                            publisher_href]
+            title = news_data['title']
+            date = news_data['date']
+            summary = news_data['summary']
+            image_path_original = news_data['image']
+            website = news_data['website']
+            article_url = news_data['link']
+
+            status = "pending"
+            # title = news_data['title']
+            # description = news_data['description']
+            # published_date = news_data['published_date']
+            # url = news_data['url']
+            # publisher_title = news_data['publisher_title']
+            # publisher_href = news_data['publisher_href']
+
+            new_row_data = [status, topic, country, title, date, summary, image_path_original, website, article_url]
+
+            # new_row_data = [status, topic, country, title, description, published_date, url, publisher_title,
+            #                 publisher_href]
             googlesheet.add_row_to_sheet(new_row_data, "NewsToday", "News")
 
 
@@ -86,7 +108,7 @@ if __name__ == "__main__":
     google_news = GNews(language='en', country=country, max_results=10)
 
     latest_news()
-    news_by_topic()
+    # news_by_topic()
 
     # tech_news = extract_news_data(get_news_by_topic("Technology"))
     # india_news = extract_news_data(get_news_by_country("IN"))
