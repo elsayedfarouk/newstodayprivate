@@ -1,5 +1,5 @@
 from gnews import GNews
-import get_redirected_link
+import get_final_url_with_selenium
 import googlesheet
 
 
@@ -27,7 +27,7 @@ def extract_news_data(articles):
             "title": article.get("title"),
             "description": article.get("description"),
             "published_date": article.get("published date"),
-            "url": get_redirected_link.get_redirected_link(article.get("url")),
+            "url": get_final_url_with_selenium.get_final_url_with_selenium(article.get("url")),
             # "url": article.get("url"),
             "publisher_title": article.get("publisher", {}).get("title"),
             "publisher_href": article.get("publisher", {}).get("href")
@@ -38,7 +38,6 @@ def extract_news_data(articles):
 
 
 def latest_news():
-
     latest_news = extract_news_data(get_latest_news())
 
     # Example: Print titles only
@@ -54,7 +53,8 @@ def latest_news():
         publisher_title = news_data['publisher_title']
         publisher_href = news_data['publisher_href']
 
-        new_row_data = [status, "latest", country, title, description, published_date, url, publisher_title, publisher_href]
+        new_row_data = [status, "latest", country, title, description, published_date, url, publisher_title,
+                        publisher_href]
         googlesheet.add_row_to_sheet(new_row_data, "NewsToday", "News")
 
 
@@ -66,7 +66,6 @@ def news_by_topic():
         topic_news_entries = extract_news_data(get_news_by_topic(topic))
 
         for news_data in topic_news_entries[:1]:
-
             status = "pending"
             title = news_data['title']
             description = news_data['description']
@@ -75,7 +74,8 @@ def news_by_topic():
             publisher_title = news_data['publisher_title']
             publisher_href = news_data['publisher_href']
 
-            new_row_data = [status, topic, country, title, description, published_date, url, publisher_title, publisher_href]
+            new_row_data = [status, topic, country, title, description, published_date, url, publisher_title,
+                            publisher_href]
             googlesheet.add_row_to_sheet(new_row_data, "NewsToday", "News")
 
 
