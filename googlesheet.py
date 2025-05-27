@@ -3,6 +3,9 @@ import os
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import os
+import base64
+
 
 
 def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
@@ -12,10 +15,19 @@ def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
     # sheet_name = "newsvideos"
 
     # Get the secret from environment variable
-    credentials_file = os.getenv("Google_Sheets")
+    # credentials_file = os.getenv("Google_Sheets")
+
+    # Get the secret from environment variable
+    encoded_credentials = os.getenv("GOOGLE_CREDENTIALS_B64")
+
+    # Decode and save to a temporary file
+    credentials_path = "credentials.json"
+    with open(credentials_path, "wb") as f:
+        f.write(base64.b64decode(encoded_credentials))
+
 
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_file, scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
     client = gspread.authorize(creds)
 
     try:
