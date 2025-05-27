@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ACTIONS_STEP_DEBUG: true
+      Google_Sheets: ${{ secrets.Google_Sheets }}
 
     steps:
 
