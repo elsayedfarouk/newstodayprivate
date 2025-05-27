@@ -35,6 +35,6 @@ def get_redirected_link(url):
 
 
 # Example usage
-url = "https://news.google.com/rss/articles/CBMifkFVX3lxTE1pbjl2bkJRUG56cEZNN19uSzlySnFMMHJEY2ZDZVZmVnJJcjk1ZGxyNF82RWJxREMwclVwNmlySlFtTnJpdGtWWHlDZmhMYzRnbFNoZEJSekxhZGs0Yk9EY21iekVfci1jNE9YRG4wcXkydW9LVURRV0swb3ZfZw?oc=5"
-redirected_link = get_redirected_link(url)
-print(f"Redirected link: {redirected_link}")
+# url = "https://news.google.com/rss/articles/CBMifkFVX3lxTE1pbjl2bkJRUG56cEZNN19uSzlySnFMMHJEY2ZDZVZmVnJJcjk1ZGxyNF82RWJxREMwclVwNmlySlFtTnJpdGtWWHlDZmhMYzRnbFNoZEJSekxhZGs0Yk9EY21iekVfci1jNE9YRG4wcXkydW9LVURRV0swb3ZfZw?oc=5"
+# redirected_link = get_redirected_link(url)
+# print(f"Redirected link: {redirected_link}")

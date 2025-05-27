@@ -1,5 +1,5 @@
 from gnews import GNews
-# import get_redirected_link
+import get_redirected_link
 import googlesheet
 
 
@@ -27,8 +27,8 @@ def extract_news_data(articles):
             "title": article.get("title"),
             "description": article.get("description"),
             "published_date": article.get("published date"),
-            # "url": get_redirected_link.get_redirected_link(article.get("url")),
-            "url": article.get("url"),
+            "url": get_redirected_link.get_redirected_link(article.get("url")),
+            # "url": article.get("url"),
             "publisher_title": article.get("publisher", {}).get("title"),
             "publisher_href": article.get("publisher", {}).get("href")
         }
