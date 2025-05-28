@@ -161,7 +161,7 @@ class NewsProcessor:
         """Process and save latest news"""
         latest_entries = self.fetch_latest_news()
 
-        for entry in latest_entries[:1]:  # Process only first entry
+        for entry in latest_entries[:5]:  # Process only first entry
             try:
                 news_data = self.process_news_entry(entry)
                 if news_data:
@@ -193,7 +193,7 @@ def main():
     processor.process_latest_news()
 
     # Uncomment to process topic news
-    # processor.process_topic_news()
+    processor.process_topic_news()
 
 
 if __name__ == "__main__":
