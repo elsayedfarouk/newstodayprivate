@@ -11,6 +11,7 @@ jobs:
     env:
       ACTIONS_STEP_DEBUG: true
       GOOGLE_CREDENTIALS_B64: ${{ secrets.GOOGLE_CREDENTIALS_B64 }}
+      gemini_api_key: ${{ secrets.gemini_api_key }}
 
     steps:
 
@@ -33,7 +34,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: execute py script # run main.py
-        run: python test.py
+        run: python main.py
 
 
       - name: Set up Node.js
