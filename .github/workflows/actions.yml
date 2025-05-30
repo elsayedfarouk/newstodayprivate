@@ -33,6 +33,10 @@ jobs:
           python -m pip install --no-deps pygooglenews
           pip install -r requirements.txt
 
+      - name: Install Dependencies TTS
+        run: |
+          pip install torch kokoro soundfile
+
       - name: execute py script # run main.py
         run: python main.py
 
