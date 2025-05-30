@@ -1,9 +1,28 @@
+import os
+import tts
 import googlesheet
 from newspaper import Article
 import google.generativeai as genai
-import traceback
+import genvideos
 import get_final_url_with_selenium
 from gnews import GNews
+import random
+import string
+from datetime import datetime
+
+
+def generate_unique_string(length=10):
+    # Create a list of all possible characters (uppercase, lowercase, digits)
+    characters = string.ascii_letters + string.digits
+
+    # Ensure that the length requested does not exceed the number of available unique characters
+    if length > len(characters):
+        raise ValueError("Length exceeds the number of unique characters available.")
+
+    # Randomly sample the characters without replacement
+    unique_string = ''.join(random.sample(characters, length))
+
+    return unique_string
 
 
 class NewsProcessor:
@@ -128,7 +147,7 @@ class NewsProcessor:
                 "summary": summary_with_cta,
                 "image": article_content.get('top_image', '') if article_content else '',
                 "website": entry.get("publisher", {}).get("href", "") if entry.get("publisher") else "",
-                "link": original_url
+                "link": final_url
             }
 
         except Exception as e:
@@ -161,11 +180,33 @@ class NewsProcessor:
         """Process and save latest news"""
         latest_entries = self.fetch_latest_news()
 
-        for entry in latest_entries[:5]:  # Process only first entry
+        for entry in latest_entries[:1]:  # Process only first entry
             try:
                 news_data = self.process_news_entry(entry)
                 if news_data:
                     self.save_to_sheet(news_data, "Latest")
+
+                    # Get today's date in the format YYYYMMDD
+                    today_date = datetime.now().strftime("%Y%m%d")
+
+                    # Create the directory structure
+                    base_folder = "news_videos"
+                    date_folder = os.path.join(base_folder, today_date)
+                    os.makedirs(date_folder, exist_ok=True)
+
+                    filename = generate_unique_string()
+
+                    image_path = news_data["image"]
+                    title = news_data["title"]
+                    summary = news_data["summary"]
+                    website = news_data["website"]
+                    title = news_data["title"]
+
+                    generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
+                    generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+
+                    genvideos.main(image_path, title, generate_speech, website, filename)
+
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
@@ -180,7 +221,28 @@ class NewsProcessor:
                 try:
                     news_data = self.process_news_entry(entry)
                     if news_data:
+                        # Get today's date in the format YYYYMMDD
+                        today_date = datetime.now().strftime("%Y%m%d")
+
+                        # Create the directory structure
+                        base_folder = "news_videos"
+                        date_folder = os.path.join(base_folder, today_date)
+                        os.makedirs(date_folder, exist_ok=True)
+
                         self.save_to_sheet(news_data, topic)
+                        filename = generate_unique_string()
+
+                        image_path = news_data["image"]
+                        title = news_data["title"]
+                        summary = news_data["summary"]
+                        website = news_data["website"]
+                        title = news_data["title"]
+
+                        generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
+                        generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+
+                        genvideos.main(image_path, title, generate_speech, website, filename)
+
                 except Exception as e:
                     print(f"Error processing {topic} news: {e}")
 
@@ -193,7 +255,7 @@ def main():
     processor.process_latest_news()
 
     # Uncomment to process topic news
-    processor.process_topic_news()
+    # processor.process_topic_news()
 
 
 if __name__ == "__main__":
