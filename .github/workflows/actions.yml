@@ -33,10 +33,35 @@ jobs:
           python -m pip install --no-deps pygooglenews
           pip install -r requirements.txt
 
+      - name: Update package lists
+        run: sudo apt-get update
+
+      - name: Install ImageMagick
+        run: sudo apt-get install -y imagemagick --fix-missing
+
+
+      - name: Install Roboto Font
+        run: sudo apt-get install fonts-roboto
+
+      - name: Update ImageMagick Policy
+        run: |
+          sudo sed -i 's/<policy domain="resource" name="width" value="16KP"/<policy domain="resource" name="width" value="32KP"/' /etc/ImageMagick-6/policy.xml
+          sudo sed -i 's/<policy domain="resource" name="height" value="16KP"/<policy domain="resource" name="height" value="32KP"/' /etc/ImageMagick-6/policy.xml
+          sudo sed -i 's/<policy domain="resource" name="width" value="16KP"/<policy domain="resource" name="width" value="32KP"/' /etc/ImageMagick-7/policy.xml || true
+          sudo sed -i 's/<policy domain="resource" name="height" value="16KP"/<policy domain="resource" name="height" value="32KP"/' /etc/ImageMagick-7/policy.xml || true
+          sudo sed -i 's/rights="none"/rights="read|write"/' /etc/ImageMagick-6/policy.xml
+          sudo sed -i 's/rights="none"/rights="read|write"/' /etc/ImageMagick-7/policy.xml || true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip imagemagick ghostscript fonts-dejavu-core fonts-freefont-ttf fonts-roboto
+          python3 -m pip install --upgrade pip
+          pip install moviepy==1.0.3
+
       - name: Install Dependencies TTS
         run: |
           pip install torch kokoro soundfile
-
       - name: execute py script # run main.py
         run: python main.py
 
