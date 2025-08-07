@@ -207,15 +207,6 @@ class NewsProcessor:
                 news_data = self.process_news_entry(entry)
                 if news_data:
 
-                    # Get today's date in the format YYYYMMDD
-                    today_date = datetime.now().strftime("%Y%m%d")
-
-                    # Create the directory structure
-                    base_folder = "news_videos"
-                    date_folder = os.path.join(base_folder, today_date)
-                    os.makedirs(date_folder, exist_ok=True)
-
-                    filename = generate_unique_string()
 
                     image_path_url = news_data["image"]
                     title = news_data["title"]
@@ -223,24 +214,47 @@ class NewsProcessor:
                     website = news_data["website"]
                     title = news_data["title"]
 
-                    output_image_path = f"news_videos/{today_date}/{filename}.png"
-                    image_path = download_image(image_path_url, output_image_path)
+
+                    # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
+                    if googlesheet.check_text_in_column_a("NewsToday", title, 2):
+                        print('Title already exists in the file.')
+                        print(title)
+
+                    else:
+
+                        # Get today's date in the format YYYYMMDD
+                        today_date = datetime.now().strftime("%Y%m%d")
+
+                        # Create the directory structure
+                        base_folder = "news_videos"
+                        date_folder = os.path.join(base_folder, today_date)
+                        os.makedirs(date_folder, exist_ok=True)
+
+                        filename = generate_unique_string()
 
 
-                    generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                    generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                    genvideos.main(output_image_path, title, generate_speech, website, filename)
+                        output_image_path = f"news_videos/{today_date}/{filename}.png"
+                        image_path = download_image(image_path_url, output_image_path)
 
-                    # Step 2: Append the new item
-                    news_data.update({"videourl": f"news_videos/{today_date}/{filename}.mp4"})
 
-                    self.save_to_sheet(news_data, "Latest")
-                    output_video_path = f"news_videos/{today_date}"
+                        generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
+                        generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                    upload_folder_to_github.run3(output_video_path)
+                        genvideos.main(output_image_path, title, generate_speech, website, filename)
 
-                    break
+
+                        output_video_path = f"news_videos/{today_date}"
+                        videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
+
+                        upload_folder_to_github.run3(output_video_path)
+
+                        # Step 2: Append the new item
+                        news_data = news_data.update({"videourl": videourl})
+
+                        self.save_to_sheet(news_data, "Latest")
+
+                        break
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
