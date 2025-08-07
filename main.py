@@ -232,10 +232,16 @@ class NewsProcessor:
 
                     genvideos.main(output_image_path, title, generate_speech, website, filename)
 
+                    # Step 2: Append the new item
+                    new_item = {"videourl": f"news_videos/{today_date}/{filename}.mp4"}
+                    news_data.append(new_item)
+
                     self.save_to_sheet(news_data, "Latest")
                     output_video_path = f"news_videos/{today_date}"
 
                     upload_folder_to_github.run3(output_video_path)
+
+                    break
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
