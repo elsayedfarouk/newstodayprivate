@@ -6,6 +6,21 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 import base64
 
+# Define the scope
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+
+
+# Get the secret from environment variable
+encoded_credentials = os.getenv("GOOGLE_CREDENTIALS_B64")
+
+# Decode and save to a temporary file
+credentials_path = "credentials.json"
+with open(credentials_path, "wb") as f:
+    f.write(base64.b64decode(encoded_credentials))
+
+# Load credentials
+creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
+client = gspread.authorize(creds)
 
 
 def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
@@ -17,18 +32,18 @@ def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
     # Get the secret from environment variable
     # credentials_file = os.getenv("Google_Sheets")
 
-    # Get the secret from environment variable
-    encoded_credentials = os.getenv("GOOGLE_CREDENTIALS_B64")
-
-    # Decode and save to a temporary file
-    credentials_path = "credentials.json"
-    with open(credentials_path, "wb") as f:
-        f.write(base64.b64decode(encoded_credentials))
-
-
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
-    client = gspread.authorize(creds)
+    # # Get the secret from environment variable
+    # encoded_credentials = os.getenv("GOOGLE_CREDENTIALS_B64")
+    #
+    # # Decode and save to a temporary file
+    # credentials_path = "credentials.json"
+    # with open(credentials_path, "wb") as f:
+    #     f.write(base64.b64decode(encoded_credentials))
+    #
+    #
+    # scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    # creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
+    # client = gspread.authorize(creds)
 
     try:
         # Open the Google Spreadsheet by its title
@@ -52,21 +67,6 @@ def check_text_in_column_a(sheet_name: str, text: str, column_values) -> bool:
     Returns:
     bool: True if the text is found in column A, False otherwise.
     """
-    # Define the scope
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-
-    # Get the secret from environment variable
-    encoded_credentials = os.getenv("GOOGLE_CREDENTIALS_B64")
-
-    # Decode and save to a temporary file
-    credentials_path = "credentials.json"
-    with open(credentials_path, "wb") as f:
-        f.write(base64.b64decode(encoded_credentials))
-
-    # Load credentials
-    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
-    client = gspread.authorize(creds)
 
     # Open the Google Sheet by name
     sheet = client.open(sheet_name).sheet1
