@@ -113,10 +113,11 @@ class NewsProcessor:
             elif response.candidates:
                 return response.candidates[0].content.parts[0].text
             else:
-                return ""
+                return None  # Explicitly return None on fallback failure
 
         except Exception as e:
-            return ""
+            print(f"Gemini API error: {e}")
+            return None  # Explicit failure
 
     def process_news_entry(self, entry):
         """Process a single news entry into structured data"""
@@ -153,19 +154,34 @@ class NewsProcessor:
 
             if content_for_summary:
                 summary = self.generate_summary(content_for_summary)
+
+                if not summary:
+                    print("Skipping entry due to Gemini API failure")
+                    return None
+
+                summary = summary.strip()
+                if len(summary) < 150:
+                    print(f"Skipping entry: summary too short ({len(summary)} characters)")
+                    return None
+
+                # Only if all checks passed, append CTA and return
+                summary_with_cta = (
+                    f"{summary} If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
+                )
+
+                return {
+                    "title": clean_title,
+                    "date": entry.get("published date", ""),
+                    "summary": summary_with_cta,
+                    "image": article_content.get('top_image', '') if article_content else '',
+                    "website": entry.get("publisher", {}).get("href", "") if entry.get("publisher") else "",
+                    "link": final_url
+                }
+
             else:
-                summary = "No content available for summary"
+                print("No content to summarize")
+                return None
 
-            summary_with_cta = f"{summary} If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
-
-            return {
-                "title": clean_title,
-                "date": entry.get("published date", ""),
-                "summary": summary_with_cta,
-                "image": article_content.get('top_image', '') if article_content else '',
-                "website": entry.get("publisher", {}).get("href", "") if entry.get("publisher") else "",
-                "link": final_url
-            }
 
         except Exception as e:
             print(f"Error processing entry: {e}")
