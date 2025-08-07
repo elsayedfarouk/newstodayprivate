@@ -307,7 +307,7 @@ class NewsProcessor:
 
                             upload_folder_to_github.run3(output_video_path)
 
-                            # self.save_to_sheet(news_data, topic, videourl)
+                            self.save_to_sheet(news_data, topic, videourl)
 
                             break
                 except Exception as e:
@@ -319,7 +319,7 @@ def main():
     processor = NewsProcessor(country='US')
 
     # Process latest news
-    # processor.process_latest_news()
+    processor.process_latest_news()
 
     # Uncomment to process topic news
     processor.process_topic_news()
