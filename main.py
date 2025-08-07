@@ -14,9 +14,11 @@ import requests
 
 def download_image(image_path_url, output_image_path):
     # Define the output file path
-
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    }
     # Download the image
-    response = requests.get(image_path_url, stream=True)
+    response = requests.get(image_path_url, headers=headers, stream=True)
     response.raise_for_status()  # Check if the request was successful
 
     with open(output_image_path, 'wb') as file:
