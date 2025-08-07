@@ -13,6 +13,7 @@ jobs:
       ACTIONS_STEP_DEBUG: true
       GOOGLE_CREDENTIALS_B64: ${{ secrets.GOOGLE_CREDENTIALS_B64 }}
       gemini_api_key: ${{ secrets.gemini_api_key }}
+      token_github: ${{ secrets.token_github }}
 
     steps:
 
