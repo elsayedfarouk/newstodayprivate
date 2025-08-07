@@ -159,11 +159,6 @@ class NewsProcessor:
                     print("Skipping entry due to Gemini API failure")
                     return None
 
-                summary = summary.strip()
-                if len(summary) < 150:
-                    print(f"Skipping entry: summary too short ({len(summary)} characters)")
-                    return None
-
                 # Only if all checks passed, append CTA and return
                 summary_with_cta = (
                     f"{summary} If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
