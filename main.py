@@ -233,8 +233,7 @@ class NewsProcessor:
                     genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                     # Step 2: Append the new item
-                    new_item = {"videourl": f"news_videos/{today_date}/{filename}.mp4"}
-                    news_data.append(new_item)
+                    news_data.update({"videourl": f"news_videos/{today_date}/{filename}.mp4"})
 
                     self.save_to_sheet(news_data, "Latest")
                     output_video_path = f"news_videos/{today_date}"
