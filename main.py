@@ -231,44 +231,54 @@ class NewsProcessor:
                     website = news_data["website"]
                     title = news_data["title"]
 
-
-                    # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
-                    if googlesheet.check_text_in_column_a("NewsToday", title, 4):
-                        print('Title already exists in the file.')
-                        print(title)
-
+                    # Check if any of the required fields are empty
+                    if not title or not summary or not image_path_url:
+                        print("Error: Missing title, summary, or image path. Skipping video generation.")
+                        print(f"title: {title}\n\n summar: {summary}\n\n image: {image_path_url}")
                     else:
 
-                        # Get today's date in the format YYYYMMDD
-                        today_date = datetime.now().strftime("%Y%m%d")
+                        summary = summary.strip()
+                        if len(summary) < 150:
+                            print(f"Skipping entry: summary too short ({len(summary)} characters)")
+                        else:
 
-                        # Create the directory structure
-                        base_folder = "news_videos"
-                        date_folder = os.path.join(base_folder, today_date)
-                        os.makedirs(date_folder, exist_ok=True)
+                            # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
+                            if googlesheet.check_text_in_column_a("NewsToday", title, 4):
+                                print('Title already exists in the file.')
+                                print(title)
 
-                        filename = generate_unique_string()
+                            else:
+
+                                # Get today's date in the format YYYYMMDD
+                                today_date = datetime.now().strftime("%Y%m%d")
+
+                                # Create the directory structure
+                                base_folder = "news_videos"
+                                date_folder = os.path.join(base_folder, today_date)
+                                os.makedirs(date_folder, exist_ok=True)
+
+                                filename = generate_unique_string()
 
 
 
-                        output_image_path = f"news_videos/{today_date}/{filename}.png"
-                        image_path = download_image(image_path_url, output_image_path)
+                                output_image_path = f"news_videos/{today_date}/{filename}.png"
+                                image_path = download_image(image_path_url, output_image_path)
 
 
-                        generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                        generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+                                generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
+                                generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                        genvideos.main(output_image_path, title, generate_speech, website, filename)
+                                genvideos.main(output_image_path, title, generate_speech, website, filename)
 
 
-                        output_video_path = f"news_videos/{today_date}"
-                        videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
+                                output_video_path = f"news_videos/{today_date}"
+                                videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
 
-                        upload_folder_to_github.run3(output_video_path)
+                                upload_folder_to_github.run3(output_video_path)
 
-                        self.save_to_sheet(news_data, "Latest", videourl)
+                                self.save_to_sheet(news_data, "Latest", videourl)
 
-                        break
+                                break
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
@@ -291,41 +301,53 @@ class NewsProcessor:
                         website = news_data["website"]
                         title = news_data["title"]
 
-                        # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
-                        if googlesheet.check_text_in_column_a("NewsToday", title, 4):
-                            print('Title already exists in the file.')
-                            print(title)
-
+                        # Check if any of the required fields are empty
+                        if not title or not summary or not image_path_url:
+                            print("Error: Missing title, summary, or image path. Skipping video generation.")
+                            print(f"title: {title}\n\n summar: {summary}\n\n image: {image_path_url}")
                         else:
 
-                            # Get today's date in the format YYYYMMDD
-                            today_date = datetime.now().strftime("%Y%m%d")
-
-                            # Create the directory structure
-                            base_folder = "news_videos"
-                            date_folder = os.path.join(base_folder, today_date)
-                            os.makedirs(date_folder, exist_ok=True)
-
-                            # self.save_to_sheet(news_data, topic)
-                            filename = generate_unique_string()
-
-                            output_image_path = f"news_videos/{today_date}/{filename}.png"
-                            image_path = download_image(image_path_url, output_image_path)
-
-                            generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                            generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
-
-                            genvideos.main(image_path, title, generate_speech, website, filename)
+                            summary = summary.strip()
+                            if len(summary) < 150:
+                                print(f"Skipping entry: summary too short ({len(summary)} characters)")
+                            else:
 
 
-                            output_video_path = f"news_videos/{today_date}"
-                            videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
+                                # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
+                                if googlesheet.check_text_in_column_a("NewsToday", title, 4):
+                                    print('Title already exists in the file.')
+                                    print(title)
 
-                            upload_folder_to_github.run3(output_video_path)
+                                else:
 
-                            self.save_to_sheet(news_data, topic, videourl)
+                                    # Get today's date in the format YYYYMMDD
+                                    today_date = datetime.now().strftime("%Y%m%d")
 
-                            break
+                                    # Create the directory structure
+                                    base_folder = "news_videos"
+                                    date_folder = os.path.join(base_folder, today_date)
+                                    os.makedirs(date_folder, exist_ok=True)
+
+                                    # self.save_to_sheet(news_data, topic)
+                                    filename = generate_unique_string()
+
+                                    output_image_path = f"news_videos/{today_date}/{filename}.png"
+                                    image_path = download_image(image_path_url, output_image_path)
+
+                                    generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
+                                    generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+
+                                    genvideos.main(image_path, title, generate_speech, website, filename)
+
+
+                                    output_video_path = f"news_videos/{today_date}"
+                                    videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
+
+                                    upload_folder_to_github.run3(output_video_path)
+
+                                    self.save_to_sheet(news_data, topic, videourl)
+
+                                    break
                 except Exception as e:
                     print(f"Error processing {topic} news: {e}")
 
