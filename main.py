@@ -207,9 +207,9 @@ class NewsProcessor:
                     title = news_data["title"]
 
                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                    # generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+                    generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                    # genvideos.main(image_path, title, generate_speech, website, filename)
+                    genvideos.main(image_path, title, generate_speech, website, filename)
 
                     self.save_to_sheet(news_data, "Latest")
 
