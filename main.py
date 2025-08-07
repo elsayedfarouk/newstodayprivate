@@ -171,7 +171,7 @@ class NewsProcessor:
             print(f"Error processing entry: {e}")
             return None
 
-    def save_to_sheet(self, news_data, category):
+    def save_to_sheet(self, news_data, category, videourl):
 
         print(news_data)
         """Save news data to Google Sheet"""
@@ -189,7 +189,8 @@ class NewsProcessor:
                 news_data.get("summary"),
                 news_data.get("image"),
                 news_data.get("website"),
-                news_data.get("link")
+                news_data.get("link"),
+                videourl
             ]
         ]
 
@@ -249,11 +250,7 @@ class NewsProcessor:
 
                         upload_folder_to_github.run3(output_video_path)
 
-                        # Step 2: Append the new item
-                        # news_data = news_data.update({"videourl": videourl})
-                        news_data["videourl"] = videourl
-
-                        self.save_to_sheet(news_data, "Latest")
+                        self.save_to_sheet(news_data, "Latest", videourl)
 
                         break
             except Exception as e:
