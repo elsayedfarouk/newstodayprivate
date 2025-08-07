@@ -250,7 +250,8 @@ class NewsProcessor:
                         upload_folder_to_github.run3(output_video_path)
 
                         # Step 2: Append the new item
-                        news_data = news_data.update({"videourl": videourl})
+                        # news_data = news_data.update({"videourl": videourl})
+                        news_data["videourl"] = videourl
 
                         self.save_to_sheet(news_data, "Latest")
 
