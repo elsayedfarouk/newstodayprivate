@@ -113,10 +113,10 @@ class NewsProcessor:
             elif response.candidates:
                 return response.candidates[0].content.parts[0].text
             else:
-                return ""
+                raise ValueError("Failed to extract text from the response")
 
         except Exception as e:
-            return ""
+            raise ValueError("Failed to extract text from the response")
 
     def process_news_entry(self, entry):
         """Process a single news entry into structured data"""
@@ -153,19 +153,19 @@ class NewsProcessor:
 
             if content_for_summary:
                 summary = self.generate_summary(content_for_summary)
-            else:
-                summary = "No content available for summary"
+            # else:
+            #     summary = "No content available for summary"
 
-            summary_with_cta = f"{summary} If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
+                summary_with_cta = f"{summary} If you like our content, don't forget to like and subscribe to our channel, NEWS TODAY."
 
-            return {
-                "title": clean_title,
-                "date": entry.get("published date", ""),
-                "summary": summary_with_cta,
-                "image": article_content.get('top_image', '') if article_content else '',
-                "website": entry.get("publisher", {}).get("href", "") if entry.get("publisher") else "",
-                "link": final_url
-            }
+                return {
+                    "title": clean_title,
+                    "date": entry.get("published date", ""),
+                    "summary": summary_with_cta,
+                    "image": article_content.get('top_image', '') if article_content else '',
+                    "website": entry.get("publisher", {}).get("href", "") if entry.get("publisher") else "",
+                    "link": final_url
+                }
 
         except Exception as e:
             print(f"Error processing entry: {e}")
@@ -307,7 +307,7 @@ class NewsProcessor:
 
                             upload_folder_to_github.run3(output_video_path)
 
-                            self.save_to_sheet(news_data, topic, videourl)
+                            # self.save_to_sheet(news_data, topic, videourl)
 
                             break
                 except Exception as e:
