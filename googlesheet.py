@@ -55,8 +55,17 @@ def check_text_in_column_a(sheet_name: str, text: str, column_values) -> bool:
     # Define the scope
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
+
+    # Get the secret from environment variable
+    encoded_credentials = os.getenv("GOOGLE_CREDENTIALS_B64")
+
+    # Decode and save to a temporary file
+    credentials_path = "credentials.json"
+    with open(credentials_path, "wb") as f:
+        f.write(base64.b64decode(encoded_credentials))
+
     # Load credentials
-    creds = ServiceAccountCredentials.from_json_keyfile_name('testing-b9de3-50dac3c9a9f5.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
     client = gspread.authorize(creds)
 
     # Open the Google Sheet by name
