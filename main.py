@@ -203,7 +203,7 @@ class NewsProcessor:
         """Process and save latest news"""
         latest_entries = self.fetch_latest_news()
 
-        for entry in latest_entries[:3]:  # Process only first entry
+        for entry in latest_entries[:9]:  # Process only first entry
             try:
                 news_data = self.process_news_entry(entry)
                 if news_data:
