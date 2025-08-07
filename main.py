@@ -11,6 +11,7 @@ import string
 from datetime import datetime
 import requests
 
+import upload_folder_to_github
 
 def download_image(image_path_url, output_image_path):
     # Define the output file path
@@ -232,7 +233,9 @@ class NewsProcessor:
                     genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                     self.save_to_sheet(news_data, "Latest")
+                    output_video_path = f"news_videos/{today_date}"
 
+                    upload_folder_to_github.run3(output_video_path)
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
