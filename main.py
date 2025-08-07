@@ -9,7 +9,21 @@ from gnews import GNews
 import random
 import string
 from datetime import datetime
+import requests
 
+
+def download_image(image_path_url, output_image_path):
+    # Define the output file path
+
+    # Download the image
+    response = requests.get(image_path_url, stream=True)
+    response.raise_for_status()  # Check if the request was successful
+
+    with open(output_image_path, 'wb') as file:
+        for chunk in response.iter_content(chunk_size=8192):
+            file.write(chunk)
+
+    return output_image_path
 
 def generate_unique_string(length=10):
     # Create a list of all possible characters (uppercase, lowercase, digits)
@@ -200,16 +214,20 @@ class NewsProcessor:
 
                     filename = generate_unique_string()
 
-                    image_path = news_data["image"]
+                    image_path_url = news_data["image"]
                     title = news_data["title"]
                     summary = news_data["summary"]
                     website = news_data["website"]
                     title = news_data["title"]
 
+                    output_image_path = f"news_videos/{today_date}/{filename}.png"
+                    image_path = download_image(image_path_url, output_image_path)
+
+
                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
                     generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                    genvideos.main(image_path, title, generate_speech, website, filename)
+                    genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                     self.save_to_sheet(news_data, "Latest")
 
