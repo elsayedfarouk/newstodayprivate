@@ -102,7 +102,7 @@ def main(image_path, title, generate_speech, website, filename):
     # final_clip = add_audio_to_clip(final_clip, audio_path)
 
     # Define the output file path
-    output_file_path = os.path.join(today_date, f"{filename}.mp4")
+    output_file_path = os.path.join(date_folder, f"{filename}.mp4")
 
     # Export the final video
     final_clip.write_videofile(output_file_path, codec="libx264", fps=24)

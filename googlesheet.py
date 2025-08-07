@@ -155,7 +155,7 @@ timestamp = date["timestamp"]
 sheet_name = "tweets"
 new_row_data = [tweet_id, creation_date, text, name, language, favorite_count, retweet_count, reply_count, quote_count,
                 retweet, views, timestamp]
-# add_row_to_sheet(new_row_data)
+add_row_to_sheet(new_row_data, "NewsToday", "News")
 
 # desc = "Steve Rosenberg: Shock Kursk incursion won't turn Russians against the war " + '\n\n' + "article_url" + '\n\n' + "Vice President Kamala Harris is poised to announce her running mate on Tuesday morning. The announcement will be followed by a campaign video and a rally in Philadelphia.\n\nHarris' selection process has involved extensive preparation, including printing campaign signs with various potential running mates. She is reportedly seeking a governing partner with experience and qualifications to serve immediately, echoing the qualities President Biden valued when choosing her four years ago.\n\nThe announcement marks a timely development in the wake of President Biden's recent reeelection announcement, solidifying Harris's role as the Democratic Party's presumptive presidential candidate. The announcement follows in-person and virtual interviews with top contenders, including Pennsylvania Gov. Josh Shapiro, Minnesota Gov. Tim Walz, and Arizona Sen. Mark Kelly."
 # new_row_data2 = ["videourl", "Steve Rosenberg: Shock Kursk incursion won't turn Russians against the war ", desc]

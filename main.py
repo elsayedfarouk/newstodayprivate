@@ -155,20 +155,25 @@ class NewsProcessor:
             return None
 
     def save_to_sheet(self, news_data, category):
+
+        print(news_data)
         """Save news data to Google Sheet"""
         if not news_data:
             return
 
         row_data = [
-            "pending",  # status
-            category,
-            self.country,
-            news_data["title"],
-            news_data["date"],
-            news_data["summary"],
-            news_data["image"],
-            news_data["website"],
-            news_data["link"]
+            str(value) if value is not None else ""
+            for value in [
+                "pending",
+                category,
+                self.country,
+                news_data.get("title"),
+                news_data.get("date"),
+                news_data.get("summary"),
+                news_data.get("image"),
+                news_data.get("website"),
+                news_data.get("link")
+            ]
         ]
 
         try:
@@ -184,7 +189,6 @@ class NewsProcessor:
             try:
                 news_data = self.process_news_entry(entry)
                 if news_data:
-                    self.save_to_sheet(news_data, "Latest")
 
                     # Get today's date in the format YYYYMMDD
                     today_date = datetime.now().strftime("%Y%m%d")
@@ -203,9 +207,11 @@ class NewsProcessor:
                     title = news_data["title"]
 
                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                    generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+                    # generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                    genvideos.main(image_path, title, generate_speech, website, filename)
+                    # genvideos.main(image_path, title, generate_speech, website, filename)
+
+                    self.save_to_sheet(news_data, "Latest")
 
             except Exception as e:
                 print(f"Error processing latest news: {e}")
