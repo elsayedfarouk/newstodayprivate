@@ -217,7 +217,7 @@ class NewsProcessor:
 
 
                     # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
-                    if googlesheet.check_text_in_column_a("NewsToday", title, 2):
+                    if googlesheet.check_text_in_column_a("NewsToday", title, 4):
                         print('Title already exists in the file.')
                         print(title)
 
