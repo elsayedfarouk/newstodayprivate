@@ -258,37 +258,58 @@ class NewsProcessor:
 
     def process_topic_news(self):
         """Process and save news by topics"""
-        topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
+        # topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
+        topics = ["WORLD"]
 
         for topic in topics:
             topic_entries = self.fetch_news_by_topic(topic)
 
-            for entry in topic_entries[:3]:  # Process first 3 entries per topic
+            for entry in topic_entries[:9]:  # Process first 3 entries per topic
                 try:
                     news_data = self.process_news_entry(entry)
                     if news_data:
-                        # Get today's date in the format YYYYMMDD
-                        today_date = datetime.now().strftime("%Y%m%d")
 
-                        # Create the directory structure
-                        base_folder = "news_videos"
-                        date_folder = os.path.join(base_folder, today_date)
-                        os.makedirs(date_folder, exist_ok=True)
-
-                        self.save_to_sheet(news_data, topic)
-                        filename = generate_unique_string()
-
-                        image_path = news_data["image"]
+                        image_path_url = news_data["image"]
                         title = news_data["title"]
                         summary = news_data["summary"]
                         website = news_data["website"]
                         title = news_data["title"]
 
-                        generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                        generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+                        # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
+                        if googlesheet.check_text_in_column_a("NewsToday", title, 4):
+                            print('Title already exists in the file.')
+                            print(title)
 
-                        genvideos.main(image_path, title, generate_speech, website, filename)
+                        else:
 
+                            # Get today's date in the format YYYYMMDD
+                            today_date = datetime.now().strftime("%Y%m%d")
+
+                            # Create the directory structure
+                            base_folder = "news_videos"
+                            date_folder = os.path.join(base_folder, today_date)
+                            os.makedirs(date_folder, exist_ok=True)
+
+                            self.save_to_sheet(news_data, topic)
+                            filename = generate_unique_string()
+
+                            output_image_path = f"news_videos/{today_date}/{filename}.png"
+                            image_path = download_image(image_path_url, output_image_path)
+
+                            generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
+                            generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+
+                            genvideos.main(image_path, title, generate_speech, website, filename)
+
+
+                            output_video_path = f"news_videos/{today_date}"
+                            videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
+
+                            upload_folder_to_github.run3(output_video_path)
+
+                            self.save_to_sheet(news_data, topic, videourl)
+
+                            break
                 except Exception as e:
                     print(f"Error processing {topic} news: {e}")
 
@@ -298,10 +319,10 @@ def main():
     processor = NewsProcessor(country='US')
 
     # Process latest news
-    processor.process_latest_news()
+    # processor.process_latest_news()
 
     # Uncomment to process topic news
-    # processor.process_topic_news()
+    processor.process_topic_news()
 
 
 if __name__ == "__main__":
