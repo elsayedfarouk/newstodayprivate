@@ -50,7 +50,7 @@ class NewsProcessor:
 
     def _configure_gemini(self):
         """Configure Gemini AI for content generation"""
-        api_key = "AIzaSyCWexOEMVgiIViLc8oLnZ3HLcBmrt2-g9w"
+        api_key = os.getenv("gemini_api_key")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(
             model_name="gemini-1.5-flash-8b",

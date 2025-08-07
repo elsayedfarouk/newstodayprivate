@@ -1,50 +1,56 @@
-import get_news as news
-import json
 import os
-from datetime import datetime
-import googlesheet
 
+import google.generativeai as genai
 
-def main():
-    topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
-    for topic in topics[:1]:
+def test_gemini_summary():
+    """Test Gemini summary generation with sample content"""
 
-        # Get recent news
-        recent_news_entries = news.get_news_by_topic1(topic)
+    # Step 1: Configure Gemini
+    api_key = os.getenv("gemini_api_key")  # Replace with your key if needed
+    genai.configure(api_key=api_key)
 
-        for each_news_entry in recent_news_entries[:1]:
-            print(each_news_entry)
-            # Extract data for each entry
-            # news_data = news.extract_data4(each_news_entry)
+    # Step 2: Load model
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash-8b",
+        safety_settings=[
+            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+        ]
+    )
 
-            article_url = each_news_entry['url']
-            title = each_news_entry['title']
-            publisher = each_news_entry['publisher']
+    # Step 3: Define sample content
+    content = (
+        "The stock market saw significant movement today as technology shares led gains. "
+        "Investors responded positively to news that inflation might be cooling down. "
+        "The S&P 500 rose by 1.2%, while the Nasdaq jumped 2% on strong earnings from major tech companies."
+    )
 
+    # Step 4: Create prompt
+    prompt = (
+        f"Summarize this news article in the style of a professional news anchor "
+        f"delivering a report. The summary should be exactly 1000 characters long, "
+        f"ensuring a natural flow suitable for text-to-speech conversion. {content}"
+    )
 
+    # Step 5: Generate and print summary
+    try:
+        response = model.generate_content(prompt)
 
-            status = ""
-            # title = news_data['title']
-            # date = news_data['date']
-            # summary = news_data['summary']
-            # image_path_original = news_data['image']
-            # website = news_data['website']
-            # article_url = news_data['link']
-            # timestamp = ""
+        if response.parts:
+            summary = response.parts[0].text
+        elif hasattr(response, 'text'):
+            summary = response.text
+        elif response.candidates:
+            summary = response.candidates[0].content.parts[0].text
+        else:
+            summary = ""
 
-            # Check if any of the required fields are empty
-            # if not title or not summary or not image_path_original:
-            #     print("Error: Missing title, summary, or image path. Skipping video generation.")
-            #     print(f"title: {title}\n\n summar: {summary}\n\n image: {image_path_original}")
-            # else:
-
-            # new_row_data = [status, title, date, summary, image_path_original, website, article_url, timestamp]
-            #
-            # googlesheet.add_row_to_sheet(new_row_data, "NewsToday", "Sheet1")
-
-            new_row_data = [status, title, publisher]
-
-            googlesheet.add_row_to_sheet(new_row_data, "NewsToday", "Sheet1")
+        print("✅ Gemini Summary Output:\n")
+        print(summary)
+    except Exception as e:
+        print(f"❌ Error while generating summary: {e}")
 
 if __name__ == "__main__":
-    main()
+    test_gemini_summary()
