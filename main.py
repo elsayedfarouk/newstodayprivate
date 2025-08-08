@@ -53,7 +53,7 @@ class NewsProcessor:
         api_key = os.getenv("gemini_api_key")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(
-            model_name="gemini-2.0-flash-lite",
+            model_name="gemini-2.5-flash-lite",
             safety_settings=[
                 {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
                 {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
@@ -99,8 +99,9 @@ class NewsProcessor:
         try:
             prompt = (
                 f"Summarize this news article in the style of a professional news anchor "
-                f"delivering a report. The summary should be exactly 1000 characters long, "
-                f"ensuring a natural flow suitable for text-to-speech conversion. {content}"
+                f"delivering a report. The summary should be exactly around 1000 characters long, "
+                f"ensuring a natural flow suitable for text-to-speech conversion. "
+                f"the following is the news article: {content}"
             )
 
             response = self.model.generate_content(prompt)
