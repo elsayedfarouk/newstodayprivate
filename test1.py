@@ -11,7 +11,7 @@ def test_gemini_summary():
 
     # Step 2: Load model
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash-8b",
+        model_name="gemini-2.5-flash-lite",
         safety_settings=[
             {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
             {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
@@ -30,8 +30,9 @@ def test_gemini_summary():
     # Step 4: Create prompt
     prompt = (
         f"Summarize this news article in the style of a professional news anchor "
-        f"delivering a report. The summary should be exactly 1000 characters long, "
-        f"ensuring a natural flow suitable for text-to-speech conversion. {content}"
+        f"delivering a report. The summary should be exactly around 1000 characters long, "
+        f"ensuring a natural flow suitable for text-to-speech conversion. "
+        f"the following is the news article: {content}"
     )
 
     # Step 5: Generate and print summary

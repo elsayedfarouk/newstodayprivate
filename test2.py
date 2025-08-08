@@ -21,7 +21,7 @@ class NewsProcessor:
         api_key = gemini_api_key
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(
-            model_name="gemini-2.0-flash-lite",
+            model_name="gemini-2.5-flash-lite",
             safety_settings=[
                 {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
                 {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
