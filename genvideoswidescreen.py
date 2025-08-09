@@ -94,3 +94,20 @@ def main(image_path, title, generate_speech, website, filename):
 
 if __name__ == "__main__":
     main()
+# if __name__ == "__main__":
+#     # Provided test data
+#     title = "Elon Musk ‘not really leaving’ the US government, says Donald Trump"
+#     website = "https://www.ft.com"
+#     filename = "elon_musk_trump_news"
+#     image_url = "news_videos/20250703/NcZIdBMJ3y.png"
+#
+#     # # Download the image
+#     # image_path = "elon_musk.jpg"
+#     # img_data = requests.get(image_url).content
+#     # with open(image_path, 'wb') as handler:
+#     #     handler.write(img_data)
+#
+#     # Your audio narration file (must exist)
+#     generate_speech = "news_videos/20250703/jZEke3LMur.wav"
+#
+#     main(image_url, title, generate_speech, website, filename)

@@ -10,7 +10,8 @@ import random
 import string
 from datetime import datetime
 import requests
-
+from moviepy.editor import AudioFileClip
+import genvideoswidescreen
 import upload_folder_to_github
 
 def download_image(image_path_url, output_image_path):
@@ -264,8 +265,20 @@ class NewsProcessor:
                                 generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
                                 generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                                genvideos.main(output_image_path, title, generate_speech, website, filename)
+                                # Load audio and check duration
+                                audio_clip = AudioFileClip(generate_speech)
+                                duration_sec = audio_clip.duration
 
+                                if duration_sec > 60:
+                                    print("Audio is over 1 minute – running longer video logic...")
+                                    # Do something for longer audio
+                                    genvideoswidescreen.main(output_image_path, title, generate_speech, website,
+                                                             filename)
+
+                                else:
+                                    print("Audio is 1 minute or less – running shorter video logic...")
+                                    # Do something else for shorter audio
+                                    genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                                 output_video_path = f"news_videos/{today_date}"
                                 videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
@@ -333,8 +346,20 @@ class NewsProcessor:
                                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
                                     generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
 
-                                    genvideos.main(image_path, title, generate_speech, website, filename)
+                                    # Load audio and check duration
+                                    audio_clip = AudioFileClip(generate_speech)
+                                    duration_sec = audio_clip.duration
 
+                                    if duration_sec > 60:
+                                        print("Audio is over 1 minute – running longer video logic...")
+                                        # Do something for longer audio
+                                        genvideoswidescreen.main(output_image_path, title, generate_speech, website,
+                                                                 filename)
+
+                                    else:
+                                        print("Audio is 1 minute or less – running shorter video logic...")
+                                        # Do something else for shorter audio
+                                        genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                                     output_video_path = f"news_videos/{today_date}"
                                     videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
