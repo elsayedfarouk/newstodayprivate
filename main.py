@@ -269,16 +269,16 @@ class NewsProcessor:
                                 audio_clip = AudioFileClip(generate_speech)
                                 duration_sec = audio_clip.duration
 
-                                if duration_sec > 60:
-                                    print("Audio is over 1 minute – running longer video logic...")
-                                    # Do something for longer audio
-                                    genvideoswidescreen.main(output_image_path, title, generate_speech, website,
-                                                             filename)
-
-                                else:
-                                    print("Audio is 1 minute or less – running shorter video logic...")
-                                    # Do something else for shorter audio
-                                    genvideos.main(output_image_path, title, generate_speech, website, filename)
+                                # if duration_sec > 60:
+                                #     print("Audio is over 1 minute – running longer video logic...")
+                                #     # Do something for longer audio
+                                #     genvideoswidescreen.main(output_image_path, title, generate_speech, website,
+                                #                              filename)
+                                #
+                                # else:
+                                #     print("Audio is 1 minute or less – running shorter video logic...")
+                                #     # Do something else for shorter audio
+                                genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                                 output_video_path = f"news_videos/{today_date}"
                                 videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
