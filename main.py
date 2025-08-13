@@ -69,7 +69,7 @@ class NewsProcessor:
 
     def fetch_news_by_topic(self, topic):
         """Fetch news by specific topic"""
-        return self.google_news.get_news(topic)
+        return self.google_news.get_news_by_topic(topic)
 
     def fetch_news_by_country(self, country_code):
         """Fetch news by country"""
@@ -298,7 +298,8 @@ class NewsProcessor:
 
         for topic in topics:
             topic_entries = self.fetch_news_by_topic(topic)
-
+            # print(topic_entries)
+            # break
             for entry in topic_entries[:9]:  # Process first 3 entries per topic
                 try:
                     news_data = self.process_news_entry(entry)
