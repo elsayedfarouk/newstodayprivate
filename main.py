@@ -291,10 +291,10 @@ class NewsProcessor:
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
-    def process_topic_news(self):
+    def process_topic_news(self, topics):
         """Process and save news by topics"""
         # topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
-        topics = ["WORLD"]
+        # topics = ["WORLD"]
 
         for topic in topics:
             topic_entries = self.fetch_news_by_topic(topic)
@@ -382,7 +382,7 @@ def main():
     processor.process_latest_news()
 
     # Uncomment to process topic news
-    processor.process_topic_news()
+    processor.process_topic_news(["WORLD"])
 
 
 if __name__ == "__main__":
