@@ -382,7 +382,7 @@ def main():
     processor.process_latest_news()
 
     # Uncomment to process topic news
-    processor.process_topic_news(["WORLD"])
+    processor.process_topic_news(["WORLD"], spreadsheet_name='NewsToday', sheet_name='News')
 
 
 if __name__ == "__main__":
