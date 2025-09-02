@@ -1,4 +1,4 @@
-name: run topics.py
+name: Run Sports News
 
 on:
   workflow_dispatch:
@@ -65,7 +65,7 @@ jobs:
         run: |
           pip install torch kokoro soundfile
       - name: execute py script # run main.py
-        run: python topics.py
+        run: python sportsnews.py
 
 
       - name: Set up Node.js
