@@ -278,12 +278,12 @@ class NewsProcessor:
                                 # else:
                                 #     print("Audio is 1 minute or less – running shorter video logic...")
                                 #     # Do something else for shorter audio
-                                genvideos.main(output_image_path, title, generate_speech, website, filename)
+                                # genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                                 output_video_path = f"news_videos/{today_date}"
                                 videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
 
-                                upload_folder_to_github.run3(output_video_path)
+                                # upload_folder_to_github.run3(output_video_path)
 
                                 self.save_to_sheet(news_data, "Latest", videourl)
 
@@ -382,7 +382,7 @@ def main():
     processor.process_latest_news()
 
     # Uncomment to process topic news
-    processor.process_topic_news(["WORLD"], spreadsheet_name='NewsToday', sheet_name='News')
+    # processor.process_topic_news(["WORLD"], spreadsheet_name='NewsToday', sheet_name='News')
 
 
 if __name__ == "__main__":
