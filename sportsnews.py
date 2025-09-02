@@ -208,7 +208,7 @@ class NewsProcessor:
         ]
 
         try:
-            googlesheet.add_row_to_sheet(row_data, "NewsToday", "Sports")
+            googlesheet.add_row_to_sheet(row_data, "SportsNewsToday", "Sports")
         except Exception as e:
             print(f"Error saving to Google Sheet: {e}")
 
@@ -240,7 +240,7 @@ class NewsProcessor:
                         else:
 
                             # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
-                            if googlesheet.check_text_in_column_a("NewsToday", title, 4):
+                            if googlesheet.check_text_in_column_a("SportsNewsToday", title, 4):
                                 print('Title already exists in the file.')
                                 print(title)
 
@@ -324,7 +324,7 @@ class NewsProcessor:
 
 
                                 # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
-                                if googlesheet.check_text_in_column_a("NewsToday", title, 4):
+                                if googlesheet.check_text_in_column_a("SportsNewsToday", title, 4):
                                     print('Title already exists in the file.')
                                     print(title)
 
