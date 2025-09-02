@@ -13,6 +13,7 @@ import requests
 from moviepy.editor import AudioFileClip
 import genvideoswidescreen
 import upload_folder_to_github
+import traceback
 
 def download_image(image_path_url, output_image_path):
     # Define the output file path
@@ -372,6 +373,7 @@ class NewsProcessor:
                                     break
                 except Exception as e:
                     print(f"Error processing {topic} news: {e}")
+                    traceback.print_exc()  # prints the full error traceback
 
 
 def main():

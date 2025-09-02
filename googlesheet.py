@@ -5,6 +5,9 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 import base64
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env
 
 # Define the scope
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
