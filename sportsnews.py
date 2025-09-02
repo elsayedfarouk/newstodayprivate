@@ -103,6 +103,7 @@ class NewsProcessor:
                 f"Summarize this news article in the style of a professional news anchor "
                 f"delivering a report. The summary should be exactly around 1000 characters long, "
                 f"ensuring a natural flow suitable for text-to-speech conversion. "
+                f"stop saying good evening, or good morning"
                 f"the following is the news article: {content}"
             )
 
