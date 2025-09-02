@@ -184,7 +184,7 @@ class NewsProcessor:
             print(f"Error processing entry: {e}")
             return None
 
-    def save_to_sheet(self, news_data, category, videourl, spreadsheet_name="NewsToday", sheet_name="News"):
+    def save_to_sheet(self, news_data, category, videourl):
 
         print(news_data)
         """Save news data to Google Sheet"""
@@ -208,7 +208,7 @@ class NewsProcessor:
         ]
 
         try:
-            googlesheet.add_row_to_sheet(row_data, spreadsheet_name, sheet_name)
+            googlesheet.add_row_to_sheet(row_data, "NewsToday", "News")
         except Exception as e:
             print(f"Error saving to Google Sheet: {e}")
 
@@ -278,12 +278,12 @@ class NewsProcessor:
                                 # else:
                                 #     print("Audio is 1 minute or less – running shorter video logic...")
                                 #     # Do something else for shorter audio
-                                # genvideos.main(output_image_path, title, generate_speech, website, filename)
+                                genvideos.main(output_image_path, title, generate_speech, website, filename)
 
                                 output_video_path = f"news_videos/{today_date}"
                                 videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
 
-                                # upload_folder_to_github.run3(output_video_path)
+                                upload_folder_to_github.run3(output_video_path)
 
                                 self.save_to_sheet(news_data, "Latest", videourl)
 
@@ -291,7 +291,7 @@ class NewsProcessor:
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
-    def process_topic_news(self, topics, spreadsheet_name, sheet_name):
+    def process_topic_news(self, topics):
         """Process and save news by topics"""
         # topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
         # topics = ["WORLD"]
@@ -324,7 +324,7 @@ class NewsProcessor:
 
 
                                 # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
-                                if googlesheet.check_text_in_column_a("NewsToday", title, 4, spreadsheet_name):
+                                if googlesheet.check_text_in_column_a("NewsToday", title, 4):
                                     print('Title already exists in the file.')
                                     print(title)
 
@@ -367,11 +367,12 @@ class NewsProcessor:
 
                                     upload_folder_to_github.run3(output_video_path)
 
-                                    self.save_to_sheet(news_data, topic, videourl, spreadsheet_name, sheet_name)
+                                    self.save_to_sheet(news_data, topic, videourl)
 
                                     break
                 except Exception as e:
                     print(f"Error processing {topic} news: {e}")
+
 
 def main():
     """Main execution function"""
@@ -381,7 +382,7 @@ def main():
     processor.process_latest_news()
 
     # Uncomment to process topic news
-    # processor.process_topic_news(["WORLD"], spreadsheet_name='NewsToday', sheet_name='News')
+    processor.process_topic_news(["WORLD"])
 
 
 if __name__ == "__main__":

@@ -56,7 +56,7 @@ def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
         print("An error occurred:", e)
 
 
-def check_text_in_column_a(sheet_name: str, text: str, column_values, spreadsheet_name='News') -> bool:
+def check_text_in_column_a(sheet_name: str, text: str, column_values) -> bool:
     """
     Checks if the specified text exists in column A of the Google Sheet.
 
@@ -69,10 +69,7 @@ def check_text_in_column_a(sheet_name: str, text: str, column_values, spreadshee
     """
 
     # Open the Google Sheet by name
-    # sheet = client.open(sheet_name).sheet1
-    # Open the Google Spreadsheet by its title
-    spreadsheet = client.open(spreadsheet_name)
-    sheet = spreadsheet.worksheet(sheet_name)
+    sheet = client.open(sheet_name).sheet1
 
     # Get all values in column A
     column_a_values = sheet.col_values(column_values)
