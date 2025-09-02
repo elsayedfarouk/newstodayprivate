@@ -6,7 +6,7 @@ def main2():
     processor = main.NewsProcessor(country='US')
 
     # Uncomment to process topic news
-    processor.process_topic_news(["BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"])
+    processor.process_topic_news(["BUSINESS", "TECHNOLOGY", "SCIENCE", "HEALTH"])
 
 
 if __name__ == "__main__":
