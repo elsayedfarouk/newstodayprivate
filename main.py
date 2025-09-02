@@ -373,7 +373,6 @@ class NewsProcessor:
                 except Exception as e:
                     print(f"Error processing {topic} news: {e}")
 
-
 def main():
     """Main execution function"""
     processor = NewsProcessor(country='US')
