@@ -2,14 +2,17 @@ import mainfile
 
 
 def main2():
+    voice = "bm_george"  # Change to other voices if needed
+    topics = ["BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
+
     """Main execution function"""
     processor = mainfile.NewsProcessor(country='UK')
 
     # Process latest news
-    processor.process_latest_news(spreadsheet_name='UKNewsToday', sheet_name='News')
+    processor.process_latest_news(spreadsheet_name='UKNewsToday', sheet_name='News', voice=voice)
 
     # Uncomment to process topic news
-    processor.process_topic_news(["BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"])
+    processor.process_topic_news(topics=topics, spreadsheet_name='UKNewsToday', sheet_name='News', voice=voice)
 
 
 if __name__ == "__main__":

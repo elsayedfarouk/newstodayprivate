@@ -213,7 +213,7 @@ class NewsProcessor:
         except Exception as e:
             print(f"Error saving to Google Sheet: {e}")
 
-    def process_latest_news(self,  spreadsheet_name, sheet_name):
+    def process_latest_news(self,  spreadsheet_name, sheet_name, voice):
         """Process and save latest news"""
         latest_entries = self.fetch_latest_news()
 
@@ -264,7 +264,7 @@ class NewsProcessor:
 
 
                                 generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                                voice = "am_adam"  # Change to other voices if needed
+                                # voice = "am_adam"  # Change to other voices if needed
 
                                 generate_speech = tts.process_text(summary, voice, generate_speech_output_path, speed=1.0)
 
@@ -294,7 +294,7 @@ class NewsProcessor:
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
-    def process_topic_news(self, topics,  spreadsheet_name, sheet_name):
+    def process_topic_news(self, topics,  spreadsheet_name, sheet_name, voice):
         """Process and save news by topics"""
         # topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
         # topics = ["WORLD"]
@@ -348,7 +348,7 @@ class NewsProcessor:
                                     image_path = download_image(image_path_url, output_image_path)
 
                                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                                    voice = "am_adam"  # Change to other voices if needed
+                                    # voice = "am_adam"  # Change to other voices if needed
 
                                     generate_speech = tts.process_text(summary, voice, generate_speech_output_path, speed=1.0)
 
