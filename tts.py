@@ -29,7 +29,7 @@ text = os.getenv("TTS_TEXT", testtext)
 
 
 # Function to generate speech from text
-def generate_speech(text, speed=1.0):
+def generate_speech(text, voice, speed=1.0):
     text = text.strip()
     audio_chunks = []  # List to store audio segments
 
@@ -52,8 +52,10 @@ def generate_speech(text, speed=1.0):
 
 
 # Function to process text and save audio
-def process_text(text, output_path="output.wav", speed=1.0):
-    audio = generate_speech(text, speed)
+def process_text(text, voice, output_path="output.wav", speed=1.0):
+    # voice = "am_adam"  # Change to other voices if needed
+
+    audio = generate_speech(text, voice, speed)
 
     if audio.size > 0:
         sf.write(output_path, audio, samplerate=24000)
@@ -65,5 +67,7 @@ def process_text(text, output_path="output.wav", speed=1.0):
 
 # Run in GitHub Actions
 if __name__ == "__main__":
+    voice = "am_adam"  # Change to other voices if needed
+
     output_path = "output.wav"
-    process_text(text, output_path)
+    process_text(text, voice, output_path)

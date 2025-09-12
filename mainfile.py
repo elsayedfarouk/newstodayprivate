@@ -264,7 +264,9 @@ class NewsProcessor:
 
 
                                 generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                                generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+                                voice = "am_adam"  # Change to other voices if needed
+
+                                generate_speech = tts.process_text(summary, voice, generate_speech_output_path, speed=1.0)
 
                                 # Load audio and check duration
                                 audio_clip = AudioFileClip(generate_speech)
@@ -346,7 +348,9 @@ class NewsProcessor:
                                     image_path = download_image(image_path_url, output_image_path)
 
                                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
-                                    generate_speech = tts.process_text(summary, generate_speech_output_path, speed=1.0)
+                                    voice = "am_adam"  # Change to other voices if needed
+
+                                    generate_speech = tts.process_text(summary, voice, generate_speech_output_path, speed=1.0)
 
                                     # Load audio and check duration
                                     audio_clip = AudioFileClip(generate_speech)
