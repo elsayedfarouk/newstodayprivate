@@ -15,6 +15,7 @@ jobs:
       gemini_api_key: ${{ secrets.gemini_api_key }}
       token_github: ${{ secrets.token_github }}
 
+
     steps:
 
       - name: checkout repo content
