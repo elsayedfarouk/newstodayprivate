@@ -3,7 +3,7 @@ name: Run Sports News
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *' # At 00:00 on Monday
+    - cron: '0 */2 * * *' # At 00:00 on Monday
 
 jobs:
   build:
