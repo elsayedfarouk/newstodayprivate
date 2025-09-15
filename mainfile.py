@@ -14,6 +14,7 @@ from moviepy.editor import AudioFileClip
 import genvideoswidescreen
 import upload_folder_to_github
 
+
 def download_image(image_path_url, output_image_path):
     # Define the output file path
     headers = {
@@ -28,6 +29,7 @@ def download_image(image_path_url, output_image_path):
             file.write(chunk)
 
     return output_image_path
+
 
 def generate_unique_string(length=10):
     # Create a list of all possible characters (uppercase, lowercase, digits)
@@ -213,7 +215,7 @@ class NewsProcessor:
         except Exception as e:
             print(f"Error saving to Google Sheet: {e}")
 
-    def process_latest_news(self,  spreadsheet_name, sheet_name, voice):
+    def process_latest_news(self, spreadsheet_name, sheet_name, voice, videooption=3):
         """Process and save latest news"""
         latest_entries = self.fetch_latest_news()
 
@@ -221,7 +223,6 @@ class NewsProcessor:
             try:
                 news_data = self.process_news_entry(entry)
                 if news_data:
-
 
                     image_path_url = news_data["image"]
                     title = news_data["title"]
@@ -257,44 +258,52 @@ class NewsProcessor:
 
                                 filename = generate_unique_string()
 
-
-
                                 output_image_path = f"news_videos/{today_date}/{filename}.png"
                                 image_path = download_image(image_path_url, output_image_path)
-
 
                                 generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
                                 # voice = "am_adam"  # Change to other voices if needed
 
-                                generate_speech = tts.process_text(summary, voice, generate_speech_output_path, speed=1.0)
+                                generate_speech = tts.process_text(summary, voice, generate_speech_output_path,
+                                                                   speed=1.0)
 
                                 # Load audio and check duration
                                 audio_clip = AudioFileClip(generate_speech)
                                 duration_sec = audio_clip.duration
 
-                                # if duration_sec > 60:
-                                #     print("Audio is over 1 minute – running longer video logic...")
-                                #     # Do something for longer audio
-                                #     genvideoswidescreen.main(output_image_path, title, generate_speech, website,
-                                #                              filename)
-                                #
-                                # else:
-                                #     print("Audio is 1 minute or less – running shorter video logic...")
-                                #     # Do something else for shorter audio
-                                genvideos.main(output_image_path, title, generate_speech, website, filename)
+                                if videooption == 1:
+                                    print("Option 1 selected – running longer widescreen video logic...")
+                                    genvideoswidescreen.main(output_image_path, title, generate_speech, website,
+                                                             filename)
+
+                                elif videooption == 2:
+                                    print("Option 2 selected – running shorter video logic...")
+                                    genvideos.main(output_image_path, title, generate_speech, website, filename)
+
+                                elif videooption == 3:
+                                    if duration_sec > 60:
+                                        print("Audio is over 1 minute – running longer video logic...")
+                                        genvideoswidescreen.main(output_image_path, title, generate_speech,
+                                                                 website, filename)
+                                    else:
+                                        print("Audio is 1 minute or less – running shorter video logic...")
+                                        genvideos.main(output_image_path, title, generate_speech, website,
+                                                       filename)
+                                else:
+                                    print("Invalid option provided. Please select between 1–3.")
 
                                 output_video_path = f"news_videos/{today_date}"
                                 videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
 
                                 upload_folder_to_github.run3(output_video_path)
 
-                                self.save_to_sheet(news_data, "Latest", videourl,  spreadsheet_name, sheet_name )
+                                self.save_to_sheet(news_data, "Latest", videourl, spreadsheet_name, sheet_name)
 
                                 break
             except Exception as e:
                 print(f"Error processing latest news: {e}")
 
-    def process_topic_news(self, topics,  spreadsheet_name, sheet_name, voice):
+    def process_topic_news(self, topics, spreadsheet_name, sheet_name, voice, videooption=3):
         """Process and save news by topics"""
         # topics = ["WORLD", "NATION", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH"]
         # topics = ["WORLD"]
@@ -325,7 +334,6 @@ class NewsProcessor:
                                 print(f"Skipping entry: summary too short ({len(summary)} characters)")
                             else:
 
-
                                 # Check if string 'video' is found in file 'Tiktok_Downloaded.csv'
                                 if googlesheet.check_text_in_column_a(spreadsheet_name, title, 4):
                                     print('Title already exists in the file.')
@@ -350,29 +358,40 @@ class NewsProcessor:
                                     generate_speech_output_path = f"news_videos/{today_date}/{filename}.wav"
                                     # voice = "am_adam"  # Change to other voices if needed
 
-                                    generate_speech = tts.process_text(summary, voice, generate_speech_output_path, speed=1.0)
+                                    generate_speech = tts.process_text(summary, voice, generate_speech_output_path,
+                                                                       speed=1.0)
 
                                     # Load audio and check duration
                                     audio_clip = AudioFileClip(generate_speech)
                                     duration_sec = audio_clip.duration
 
-                                    if duration_sec > 60:
-                                        print("Audio is over 1 minute – running longer video logic...")
-                                        # Do something for longer audio
+                                    if videooption == 1:
+                                        print("Option 1 selected – running longer widescreen video logic...")
                                         genvideoswidescreen.main(output_image_path, title, generate_speech, website,
                                                                  filename)
 
-                                    else:
-                                        print("Audio is 1 minute or less – running shorter video logic...")
-                                        # Do something else for shorter audio
+                                    elif videooption == 2:
+                                        print("Option 2 selected – running shorter video logic...")
                                         genvideos.main(output_image_path, title, generate_speech, website, filename)
+
+                                    elif videooption == 3:
+                                        if duration_sec > 60:
+                                            print("Audio is over 1 minute – running longer video logic...")
+                                            genvideoswidescreen.main(output_image_path, title, generate_speech,
+                                                                     website, filename)
+                                        else:
+                                            print("Audio is 1 minute or less – running shorter video logic...")
+                                            genvideos.main(output_image_path, title, generate_speech, website,
+                                                           filename)
+                                    else:
+                                        print("Invalid option provided. Please select between 1–3.")
 
                                     output_video_path = f"news_videos/{today_date}"
                                     videourl = f"https://github.com/elsayedfarouk/public/raw/main/news_videos/{today_date}/{filename}.mp4"
 
                                     upload_folder_to_github.run3(output_video_path)
 
-                                    self.save_to_sheet(news_data, topic, videourl,  spreadsheet_name, sheet_name)
+                                    self.save_to_sheet(news_data, topic, videourl, spreadsheet_name, sheet_name)
 
                                     break
                 except Exception as e:

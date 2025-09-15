@@ -9,10 +9,10 @@ def main2():
     processor = mainfile.NewsProcessor(country='CA')
 
     # Process latest news
-    processor.process_latest_news(spreadsheet_name='CanadaNewsToday', sheet_name='News', voice=voice)
+    processor.process_latest_news(spreadsheet_name='CanadaNewsToday', sheet_name='News', voice=voice, videooption=2)
 
     # Uncomment to process topic news
-    # processor.process_topic_news(topics=topics, spreadsheet_name='CanadaNewsToday', sheet_name='News', voice=voice)
+    # processor.process_topic_news(topics=topics, spreadsheet_name='CanadaNewsToday', sheet_name='News', voice=voice, videooption=2)
 
 
 if __name__ == "__main__":
