@@ -56,7 +56,9 @@ def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
         sheet.append_row(new_row_data)
         print("New row added successfully to sheet '{}'!".format(sheet_name))
     except Exception as e:
-        print("An error occurred:", e)
+        print("An error occurred:")
+        print("Type:", type(e).__name__)
+        print("Message:", str(e))
 
 
 def check_text_in_column_a(sheet_name: str, text: str, column_values) -> bool:
