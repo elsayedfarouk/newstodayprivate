@@ -6,12 +6,13 @@ def test_gemini_summary():
     """Test Gemini summary generation with sample content"""
 
     # Step 1: Configure Gemini
-    api_key = os.getenv("gemini_api_key")  # Replace with your key if needed
+    # api_key = os.getenv("gemini_api_key")  # Replace with your key if needed
+    api_key = "AIzaSyCWexOEMVgiIViLc8oLnZ3HLcBmrt2-g9w"
     genai.configure(api_key=api_key)
 
     # Step 2: Load model
     model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash-lite",
+        model_name="gemma-3-27b-it",
         safety_settings=[
             {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
             {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
