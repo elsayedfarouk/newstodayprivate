@@ -98,14 +98,35 @@ class NewsProcessor:
     def generate_summary(self, content):
         """Generate AI summary of article content"""
         try:
-            prompt = (
-                f"Summarize this news article in the style of a professional news anchor "
-                f"delivering a report. The summary should be exactly around 1000 characters long, "
-                f"ensuring a natural flow suitable for text-to-speech conversion. "
-                f"stop saying good evening, or good morning"
-                f"stop saying or replying in the response Here a news report summarizing the article, aiming for approximately 1000 characters:"
-                f"the following is the news article: {content}"
-            )
+            prompt = f"""
+            You are a professional news anchor.
+
+            TASK:
+            Summarize the following news article as a broadcast-ready news report.
+
+            STRICT RULES:
+            - Output ONLY the summary text.
+            - Do NOT include introductions, conclusions, explanations, or meta comments.
+            - Do NOT say phrases like:
+              "Here’s a news report"
+              "This article discusses"
+              "In summary"
+              "Good evening" or "Good morning"
+            - Do NOT address the audience.
+            - Do NOT mention liking, subscribing, or the channel.
+            - Write in a neutral, professional news anchor tone.
+            - Ensure smooth flow suitable for text-to-speech.
+            - Length must be approximately 1000 characters.
+
+            OUTPUT FORMAT:
+            - Plain text only.
+            - No quotes.
+            - No headings.
+            - No extra lines before or after the summary.
+
+            NEWS ARTICLE:
+            {content}
+            """
 
             response = self.model.generate_content(prompt)
 
