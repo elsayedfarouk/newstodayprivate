@@ -13,6 +13,8 @@ import requests
 from moviepy.editor import AudioFileClip
 import genvideoswidescreen
 import upload_folder_to_github
+import post_to_facebook
+
 
 def download_image(image_path_url, output_image_path):
     # Define the output file path
@@ -311,6 +313,8 @@ class NewsProcessor:
 
                                 self.save_to_sheet(news_data, "Latest", videourl)
 
+                                post_to_facebook.post_video_from_url(video_url=videourl,title=title,description=summary)
+
                                 break
             except Exception as e:
                 print(f"Error processing latest news: {e}")
@@ -393,6 +397,9 @@ class NewsProcessor:
                                     upload_folder_to_github.run3(output_video_path)
 
                                     self.save_to_sheet(news_data, topic, videourl)
+
+                                    post_to_facebook.post_video_from_url(video_url=videourl, title=title,
+                                                                         description=summary)
 
                                     break
                 except Exception as e:
