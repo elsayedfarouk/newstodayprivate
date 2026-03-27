@@ -43,6 +43,15 @@ def post_video_from_url(video_url: str,
     }
 
     response = requests.post(endpoint, data=payload)
+
+    # --- Simple Success / Fail Check ---
+    if "id" in response:
+        print("✅ Video posted successfully!")
+        print("Video ID:", response["id"])
+    else:
+        print("❌ Failed to post video.")
+        print("Error:", response)
+
     return response.json()
 
 
