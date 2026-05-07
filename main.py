@@ -56,7 +56,7 @@ class NewsProcessor:
         api_key = os.getenv("gemini_api_key")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(
-            model_name="gemma-3-27b-it",
+            model_name="gemma-4-31b-it",
             safety_settings=[
                 {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
                 {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
