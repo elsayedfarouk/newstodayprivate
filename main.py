@@ -1,3 +1,4 @@
+import json
 import os
 import tts
 import googlesheet
@@ -51,12 +52,39 @@ class NewsProcessor:
         self.country = country
         self._configure_gemini()
 
+    # def _configure_gemini(self):
+    #     """Configure Gemini AI for content generation"""
+    #     api_key = os.getenv("gemini_api_key")
+    #     genai.configure(api_key=api_key)
+    #     self.model = genai.GenerativeModel(
+    #         model_name="gemma-4-31b-it",
+    #         safety_settings=[
+    #             {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+    #             {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+    #             {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+    #             {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+    #         ]
+    #     )
     def _configure_gemini(self):
-        """Configure Gemini AI for content generation"""
+        """Configure Gemini AI for content generation forcing strict JSON mode"""
         api_key = os.getenv("gemini_api_key")
         genai.configure(api_key=api_key)
+
+        # Define a raw JSON schema structure directly to prevent Chain-of-Thought leak
+        json_schema = {
+            "type": "OBJECT",
+            "properties": {
+                "anchor_script": {"type": "STRING"}
+            },
+            "required": ["anchor_script"]
+        }
+
         self.model = genai.GenerativeModel(
             model_name="gemma-4-31b-it",
+            generation_config={
+                "response_mime_type": "application/json",
+                "response_schema": json_schema
+            },
             safety_settings=[
                 {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
                 {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
@@ -64,7 +92,6 @@ class NewsProcessor:
                 {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
             ]
         )
-
     def fetch_latest_news(self):
         """Fetch latest top news"""
         return self.google_news.get_top_news()
@@ -97,55 +124,98 @@ class NewsProcessor:
         except Exception as e:
             return {'text': '', 'top_image': '', 'html': '', 'canonical_link': ''}
 
+    # def generate_summary(self, content):
+    #     """Generate AI summary of article content"""
+    #     try:
+    #         prompt = f"""
+    #         You are a professional news anchor.
+    #
+    #         TASK:
+    #         Summarize the following news article as a broadcast-ready news report.
+    #
+    #         STRICT RULES:
+    #         - Output ONLY the summary text.
+    #         - Do NOT include introductions, conclusions, explanations, or meta comments.
+    #         - Do NOT say phrases like:
+    #           "Here’s a news report"
+    #           "This article discusses"
+    #           "In summary"
+    #           "Good evening" or "Good morning"
+    #         - Do NOT address the audience.
+    #         - Do NOT mention liking, subscribing, or the channel.
+    #         - Write in a neutral, professional news anchor tone.
+    #         - Ensure smooth flow suitable for text-to-speech.
+    #         - Length must be approximately 1000 characters.
+    #
+    #         OUTPUT FORMAT:
+    #         - Plain text only.
+    #         - No quotes.
+    #         - No headings.
+    #         - No extra lines before or after the summary.
+    #
+    #         NEWS ARTICLE:
+    #         {content}
+    #         """
+    #
+    #         response = self.model.generate_content(prompt)
+    #
+    #         # Extract generated text with fallback methods
+    #         if response.parts:
+    #             return response.parts[0].text
+    #         elif hasattr(response, 'text'):
+    #             return response.text
+    #         elif response.candidates:
+    #             return response.candidates[0].content.parts[0].text
+    #         else:
+    #             return None  # Explicitly return None on fallback failure
+    #
+    #     except Exception as e:
+    #         print(f"Gemini API error: {e}")
+    #         return None  # Explicit failure
     def generate_summary(self, content):
-        """Generate AI summary of article content"""
+        """Generate AI summary of article content and parse structural JSON response"""
         try:
+            # Streamlined prompt optimized to act as a structured value engine
             prompt = f"""
             You are a professional news anchor.
 
             TASK:
-            Summarize the following news article as a broadcast-ready news report.
+            Summarize the following news article as a broadcast-ready news report mapping your entire final script into the target JSON object.
 
             STRICT RULES:
-            - Output ONLY the summary text.
             - Do NOT include introductions, conclusions, explanations, or meta comments.
-            - Do NOT say phrases like:
-              "Here’s a news report"
-              "This article discusses"
-              "In summary"
-              "Good evening" or "Good morning"
+            - Do NOT say phrases like: "Here’s a news report", "This article discusses", "In summary", "Good evening", or "Good morning".
             - Do NOT address the audience.
             - Do NOT mention liking, subscribing, or the channel.
             - Write in a neutral, professional news anchor tone.
             - Ensure smooth flow suitable for text-to-speech.
             - Length must be approximately 1000 characters.
 
-            OUTPUT FORMAT:
-            - Plain text only.
-            - No quotes.
-            - No headings.
-            - No extra lines before or after the summary.
-
-            NEWS ARTICLE:
+            NEWS ARTICLE TO SUMMARIZE:
             {content}
             """
 
             response = self.model.generate_content(prompt)
 
-            # Extract generated text with fallback methods
-            if response.parts:
-                return response.parts[0].text
-            elif hasattr(response, 'text'):
-                return response.text
+            # Extract generated raw JSON text
+            raw_text = ""
+            if hasattr(response, 'text') and response.text:
+                raw_text = response.text
+            elif response.parts:
+                raw_text = response.parts[0].text
             elif response.candidates:
-                return response.candidates[0].content.parts[0].text
-            else:
-                return None  # Explicitly return None on fallback failure
+                raw_text = response.candidates[0].content.parts[0].text
+
+            if raw_text:
+                # Parse out the JSON object safely to extract just your clean string script
+                json_data = json.loads(raw_text)
+                return json_data.get("anchor_script", "").strip()
+
+            return None  # Explicitly return None on fallback failure
 
         except Exception as e:
             print(f"Gemini API error: {e}")
             return None  # Explicit failure
-
     def process_news_entry(self, entry):
         """Process a single news entry into structured data"""
         if not entry:
