@@ -32,7 +32,7 @@ jobs:
           python -m pip install "dateparser==0.7.6"
           python -m pip install "requests==2.27.1"
           python -m pip install "feedparser==6.0.8"
-          python -m pip install zernio
+          python -m pip install "zernio-sdk~=1.4.647"
           pip install -r requirements.txt
 
       - name: Update system package lists
