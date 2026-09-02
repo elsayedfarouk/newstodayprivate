@@ -51,7 +51,10 @@ def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
     try:
         # Open the Google Spreadsheet by its title
         spreadsheet = client.open(spreadsheet_name)
-        sheet = spreadsheet.worksheet(sheet_name)
+        try:
+            sheet = spreadsheet.worksheet(sheet_name)
+        except Exception:
+            sheet = spreadsheet.sheet1
         # Append the new row
         sheet.append_row(new_row_data)
         print("New row added successfully to sheet '{}'!".format(sheet_name))
@@ -63,24 +66,29 @@ def add_row_to_sheet(new_row_data, spreadsheet_name, sheet_name):
 
 def check_text_in_column_a(sheet_name: str, text: str, column_values) -> bool:
     """
-    Checks if the specified text exists in column A of the Google Sheet.
+    Checks if the specified text exists in column A (or given column) of the Google Sheet.
 
     Parameters:
     sheet_name (str): The name of the Google Sheet.
-    text (str): The text to search for in column A.
+    text (str): The text to search for.
+    column_values (int): The column index (1-based).
 
     Returns:
-    bool: True if the text is found in column A, False otherwise.
+    bool: True if the text is found in the column, False otherwise.
     """
-
-    # Open the Google Sheet by name
-    sheet = client.open(sheet_name).sheet1
-
-    # Get all values in column A
-    column_a_values = sheet.col_values(column_values)
-
-    # Check if the text is in column A
-    return text in column_a_values
+    try:
+        # Open the Google Sheet by name
+        sheet = client.open(sheet_name).sheet1
+        # Get all values in column
+        column_a_values = sheet.col_values(column_values)
+        if not text:
+            return False
+        clean_target = text.strip().lower()
+        # Case-insensitive and whitespace-trimmed check
+        return any(clean_target == (str(val or "")).strip().lower() for val in column_a_values)
+    except Exception as e:
+        print(f"[Google Sheet Check Note] Could not verify duplicates in '{sheet_name}': {e}")
+        return False
 
 
 def get_column_text(sheet_name: str, column_id: int) -> list:
