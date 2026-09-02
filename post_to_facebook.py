@@ -32,6 +32,7 @@ def post_video_from_url(video_url: str,
 
     page_id = "1019688641230557"
     access_token = os.getenv("token_facebook")
+    access_token ='EAA5EmFcnRGEBRCv6eC0RHhwIcK0RJs2ZCYFRs1KZBCRnl3QmyblyKP4zUlayZBnWXZCX3rFNUbDFQ4MpS6sKpUjTtZAGIs1DGf9avGuVYCZBsJMwFh1HNrVHXYhOIRolUbxRNaOGsDDvWmksEDGiNPFeXmZAt3l5fZAtH3H5nQAl6wkZAPP49znXcx2UgDMjY9qpPrlJ6vnZAPapYzh3Aq0T1nBjHFzCNN43sIWY0K'
 
     endpoint = f"https://graph.facebook.com/v19.0/{page_id}/videos"
 
