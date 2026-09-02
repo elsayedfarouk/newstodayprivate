@@ -80,7 +80,7 @@ class NewsProcessor:
         }
 
         self.model = genai.GenerativeModel(
-            model_name="gemini-3.1-flash-lite",
+            model_name="gemini-3.5-flash-lite",
             generation_config={
                 "response_mime_type": "application/json",
                 "response_schema": json_schema
